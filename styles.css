@@ -1,0 +1,80 @@
+:root {
+  --bg: #ececec;
+  --ink: #111111;
+  --line: #1f1f1f;
+  --muted: #5e5e5e;
+  --paper: #ffffff;
+  --paper-alt: #f6f6f6;
+  --selected: #111111;
+  --selected-ink: #ffffff;
+  --sans: "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+body {
+  overflow: hidden;
+}
+
+.app-root,
+.graph-shell,
+.graph-canvas {
+  width: 100vw;
+  height: 100vh;
+}
+
+.graph-shell {
+  position: relative;
+  background: var(--bg);
+}
+
+.graph-canvas {
+  position: relative;
+}
+
+.x6-graph {
+  background: var(--bg);
+}
+
+.x6-node text,
+.x6-edge text {
+  font-family: var(--sans);
+}
+
+.model-picker {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 6px;
+}
+
+.model-btn {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #e5e5e5;
+  color: var(--ink);
+  transition: background 0.15s, color 0.15s;
+}
+
+.model-btn.active {
+  background: var(--ink);
+  color: #ffffff;
+}

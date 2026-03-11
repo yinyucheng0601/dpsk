@@ -41,6 +41,7 @@ body {
 
 .graph-canvas {
   position: relative;
+  touch-action: none;
 }
 
 .x6-graph {

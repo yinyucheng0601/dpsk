@@ -175,6 +175,56 @@
     },
   });
 
+  // ── Touch support (mobile pan + pinch-to-zoom) ─────────────────────────────
+  (function initTouch() {
+    let lastPan = null;
+    let lastDist = 0;
+
+    function dist(t0, t1) {
+      return Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+    }
+
+    graphContainer.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        lastPan = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        lastDist = 0;
+      } else if (e.touches.length === 2) {
+        lastPan = null;
+        lastDist = dist(e.touches[0], e.touches[1]);
+      }
+    }, { passive: false });
+
+    graphContainer.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+      if (e.touches.length === 1 && lastPan) {
+        const dx = e.touches[0].clientX - lastPan.x;
+        const dy = e.touches[0].clientY - lastPan.y;
+        const t = graph.getTranslation();
+        graph.translate(t.tx + dx, t.ty + dy);
+        lastPan = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if (e.touches.length === 2 && lastDist > 0) {
+        const t0 = e.touches[0], t1 = e.touches[1];
+        const newDist = dist(t0, t1);
+        const factor = newDist / lastDist;
+        const midX = (t0.clientX + t1.clientX) / 2;
+        const midY = (t0.clientY + t1.clientY) / 2;
+        const rect = graphContainer.getBoundingClientRect();
+        graph.zoomTo(
+          Math.min(2.2, Math.max(0.4, graph.zoom() * factor)),
+          { center: { x: midX - rect.left, y: midY - rect.top } }
+        );
+        lastDist = newDist;
+      }
+    }, { passive: false });
+
+    graphContainer.addEventListener("touchend", () => {
+      lastPan = null;
+      lastDist = 0;
+    });
+  })();
+  // ───────────────────────────────────────────────────────────────────────────
+
   function isDense(layer) {
     return layer.block_type === "dense_ffn";
   }
